@@ -72,9 +72,9 @@ export function Biography() {
         </Reveal>
 
         {/* Milestones */}
-        <div className="mt-20 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-20 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {milestones.map((m, i) => (
-            <Reveal key={m.title} delay={(i % 3) * 0.08}>
+            <Reveal key={m.title} delay={(i % 4) * 0.06}>
               <article className="group relative h-full rounded-2xl border border-slate-200 bg-surface p-7 transition duration-300 hover:-translate-y-1 hover:border-gold-400 hover:bg-white hover:shadow-xl hover:shadow-pti-green-900/10">
                 <span className="absolute left-0 top-7 h-8 w-1 rounded-r-full bg-pti-red-600 transition-all group-hover:h-12 group-hover:bg-gold-500" />
                 <p className="font-heading text-xs font-bold uppercase tracking-[0.2em] text-pti-green-600">{m.tag}</p>

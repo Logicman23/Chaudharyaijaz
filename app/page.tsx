@@ -1,6 +1,7 @@
 import { Biography } from "@/components/Biography";
 import { Contact } from "@/components/Contact";
 import { Events } from "@/components/Events";
+import { Experience } from "@/components/Experience";
 import { Footer } from "@/components/Footer";
 import { Gallery } from "@/components/Gallery";
 import { HeroSlider } from "@/components/HeroSlider";
@@ -17,6 +18,7 @@ export default function Home() {
       <main>
         <HeroSlider />
         <Biography />
+        <Experience />
         <Vision />
         <Gallery />
         <Events />

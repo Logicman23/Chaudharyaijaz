@@ -96,6 +96,16 @@ export const milestones = [
     body: "Brought the Khalifa Refinery project — worth US $6 billion — to Pakistan.",
   },
   {
+    tag: "Thought Leadership",
+    title: "88 seminars & conferences worldwide",
+    body: "Spoke as a technocrat on industrial city development, corporate culture in the developing world and industrial management.",
+  },
+  {
+    tag: "Education",
+    title: "Syndicate Member, Quaid-e-Azam University",
+    body: "Curbed misappropriation of government funds by bringing private investment on a BOT basis to develop university projects.",
+  },
+  {
     tag: "Parliament",
     title: "Member, National Assembly of Pakistan",
     body: "Submitted more than 190 bills, including the elimination of discretionary powers at every tier and the merger of state welfare funds into one institution.",
@@ -114,6 +124,46 @@ export const milestones = [
     tag: "PTI",
     title: "Joined Pakistan Tehreek-e-Insaf",
     body: "Resigned from the then-ruling party and the National Assembly on principle, and joined Imran Khan's PTI in opposition — standing in the front line of the struggle for democracy and justice.",
+  },
+] as const;
+
+/** "Experience" section of the official profile — three decades running a Kuwait-headquartered group. */
+export const experience = [
+  {
+    title: "International Corporate Affairs",
+    body: "Represented international companies as strategic partner, agent, distributor, sponsor and adviser across the Middle East, Pakistan, AJK and Afghanistan.",
+  },
+  {
+    title: "Crisis Management",
+    body: "In the post-Gulf War era, worked with world-leading firms such as Bechtel and the Government of Kuwait while more than 300 oil fields were burning.",
+  },
+  {
+    title: "Reconstruction & Rehabilitation",
+    body: "Played a leading role in rebuilding and rehabilitating Kuwait after the war — a contribution on the record of the Kuwaiti Government.",
+  },
+  {
+    title: "Petrochemical Industry",
+    body: "Management and marketing expertise across the upstream and downstream petrochemical product lines of international companies.",
+  },
+  {
+    title: "BOT Projects",
+    body: "Arranged finance, design, tendering and supervision for build-operate-transfer projects — airports, tourist cities and a large agro project in Egypt.",
+  },
+  {
+    title: "Mega Projects",
+    body: "Management, design and execution of mega-scale hi-tech projects, with partners behind landmarks such as the Dubai Monorail and Business Bay.",
+  },
+  {
+    title: "Aerospace Industry",
+    body: "Drove strong revenue growth at Kuwait Airways through consultancy and management, and advised leading airlines on budgets and route marketing.",
+  },
+  {
+    title: "Director, PARCO",
+    body: "Replaced bureaucratic working styles at Pak-Arab Refinery, bringing the company to success on international standards.",
+  },
+  {
+    title: "Project Management",
+    body: "Civil and electro-mechanical works — medium and large projects for government, semi-government and the private sector.",
   },
 ] as const;
 
