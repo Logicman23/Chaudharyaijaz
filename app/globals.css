@@ -1,0 +1,76 @@
+@import "tailwindcss";
+
+/*
+ * Design system — PTI flag palette.
+ * Green carries structure (nav, footer, headings, overlays); red and gold are
+ * reserved for focal points (CTAs, badges, active states, key borders) so they
+ * keep their pull. Surfaces stay white / soft gray for readability.
+ */
+@theme {
+  --color-pti-green-50: #eef8f2;
+  --color-pti-green-100: #d5eedf;
+  --color-pti-green-200: #a9dcbf;
+  --color-pti-green-500: #14965a;
+  --color-pti-green-600: #0e7d48;
+  --color-pti-green-700: #0a643a;
+  --color-pti-green-800: #074d2c;
+  --color-pti-green-900: #053b22;
+  --color-pti-green-950: #032515;
+
+  --color-pti-red-50: #fdeeef;
+  --color-pti-red-500: #e5283a;
+  --color-pti-red-600: #cc1426;
+  --color-pti-red-700: #a80f1f;
+
+  --color-gold-200: #f6e7b4;
+  --color-gold-300: #eed589;
+  --color-gold-400: #e2bd52;
+  --color-gold-500: #d0a42c;
+  --color-gold-600: #b0861b;
+
+  --color-surface: #f5f7f6;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
+  --font-urdu: var(--font-nastaliq), "Jameel Noori Nastaleeq", serif;
+
+  --animate-marquee: marquee 40s linear infinite;
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Offset anchor jumps so the sticky navbar never covers a section title. */
+  scroll-padding-top: 5rem;
+}
+
+body {
+  background: #ffffff;
+  color: var(--color-pti-green-950);
+  font-family: var(--font-sans);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+/* Gold gradient text for headline emphasis. */
+.text-gold-gradient {
+  background: linear-gradient(100deg, var(--color-gold-300), var(--color-gold-500) 55%, var(--color-gold-300));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Tri-band flag rule used under section headings and on the footer edge. */
+.flag-rule {
+  background: linear-gradient(
+    90deg,
+    var(--color-pti-green-600) 0 45%,
+    var(--color-pti-red-600) 45% 70%,
+    var(--color-gold-500) 70% 100%
+  );
+}
