@@ -12,17 +12,14 @@ declare global {
 }
 
 /**
- * X (Twitter) profile timeline via X's official widgets.js.
+ * X (Twitter) profile timeline via X's official widgets.js — the LAST-RESORT
+ * source for the X card (see XFeed in components/MediaCenter.tsx).
  *
- * Why not the API: reading a user timeline server-side needs a paid X API tier
- * (Basic or higher). The widget is free and always current.
- *
- * Caveat: X sometimes shows logged-out visitors a sign-in prompt instead of the
- * timeline. The widget's built-in fallback (the anchor below) then still links to
- * the profile, and pinned posts can be shown with <Tweet id="…" /> from
- * `react-tweet` (no API key — see components/social/PinnedTweets.tsx).
+ * Since 2023 X answers logged-out timeline requests with HTTP 429, so for most
+ * visitors this widget stays empty. When it doesn't render a visible timeline
+ * within a few seconds we swap in a follow card.
  */
-const RENDER_TIMEOUT_MS = 8000;
+const RENDER_TIMEOUT_MS = 6000;
 
 function Timeline({ height }: { height: number }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -32,13 +29,15 @@ function Timeline({ height }: { height: number }) {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    // The widget swaps the anchor for an iframe once it renders.
-    const mo = new MutationObserver(() => {
-      if (el.querySelector("iframe")) setRendered(true);
-    });
-    mo.observe(el, { childList: true, subtree: true });
-    // X increasingly refuses timelines to logged-out visitors (or an ad blocker
-    // eats widgets.js). Don't leave a spinner forever — show a follow card.
+    // The widget always inserts an iframe — even when X refuses the timeline, it
+    // just stays 0px tall. Only a visibly tall iframe counts as rendered.
+    const poll = window.setInterval(() => {
+      const frame = el.querySelector<HTMLIFrameElement>('iframe[id^="twitter-widget"]');
+      if (frame && frame.offsetHeight > 100) {
+        setRendered(true);
+        window.clearInterval(poll);
+      }
+    }, 500);
     const timer = window.setTimeout(() => setTimedOut(true), RENDER_TIMEOUT_MS);
 
     if (window.twttr?.widgets) {
@@ -51,7 +50,7 @@ function Timeline({ height }: { height: number }) {
       document.body.appendChild(s);
     }
     return () => {
-      mo.disconnect();
+      window.clearInterval(poll);
       window.clearTimeout(timer);
     };
   }, []);

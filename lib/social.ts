@@ -1,5 +1,6 @@
 import "server-only";
 import { cacheLife, cacheTag } from "next/cache";
+import { getTweet, type Tweet } from "react-tweet/api";
 import { socials } from "@/lib/site";
 
 /**
@@ -12,7 +13,9 @@ import { socials } from "@/lib/site";
  *  YouTube    | Public channel RSS, fetched on the server   | No
  *  Instagram  | Instagram Graph API (/me/media)             | Yes — INSTAGRAM_ACCESS_TOKEN
  *  Facebook   | Official Page Plugin iframe (client, lazy)  | No
- *  X          | Official timeline widget (client, lazy)     | No (paid API for server-side)
+ *  X          | X API v2 → post IDs → react-tweet (server)  | Yes — X_BEARER_TOKEN (paid Basic tier)
+ *             | …or hand-picked IDs (lib/site.ts)           | No
+ *             | …last resort: timeline widget (client)      | No, but X blocks it for most visitors
  *
  * Server feeds use `'use cache'` + `cacheLife('minutes')`: the page is served
  * from cache and refreshed in the background at most every few minutes, so a new
@@ -84,6 +87,57 @@ export async function getLatestYouTubeVideos(limit = 6): Promise<YouTubeVideo[]>
     // A feed outage must never take the page down — the UI falls back to a channel link.
     return [];
   }
+}
+
+/**
+ * IDs of the latest original posts by @aijaz_ch, via the X API v2.
+ *
+ * X no longer serves profile timelines to logged-out visitors (the embed widget
+ * gets HTTP 429), so automatic updates need API access:
+ *  1. developer.x.com → create a project/app on the Basic tier (paid; the Free
+ *     tier cannot read timelines).
+ *  2. Copy the app's Bearer Token into Vercel env var X_BEARER_TOKEN.
+ * Cached for an hour to stay well inside the Basic tier's monthly read quota.
+ */
+export async function getLatestTweetIds(limit = 4): Promise<string[]> {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("social", "x");
+
+  const token = process.env.X_BEARER_TOKEN;
+  if (!token) return [];
+
+  try {
+    const headers = { Authorization: `Bearer ${token}` };
+    const userRes = await fetch(`https://api.x.com/2/users/by/username/${socials.x.handle}`, { headers });
+    if (!userRes.ok) return [];
+    const { data: user } = (await userRes.json()) as { data?: { id: string } };
+    if (!user) return [];
+
+    // max_results must be 5–100; we trim to `limit` afterwards.
+    const tweetsRes = await fetch(
+      `https://api.x.com/2/users/${user.id}/tweets?max_results=5&exclude=replies,retweets`,
+      { headers },
+    );
+    if (!tweetsRes.ok) return [];
+    const { data } = (await tweetsRes.json()) as { data?: { id: string }[] };
+    return (data ?? []).slice(0, limit).map((t) => t.id);
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Full post data for the given IDs from X's public syndication endpoint (the
+ * same one embedded posts use — no key needed), rendered by react-tweet.
+ */
+export async function getTweets(ids: string[]): Promise<Tweet[]> {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("social", "x");
+
+  const tweets = await Promise.all(ids.map((id) => getTweet(id).catch(() => undefined)));
+  return tweets.filter((t): t is Tweet => Boolean(t));
 }
 
 /**

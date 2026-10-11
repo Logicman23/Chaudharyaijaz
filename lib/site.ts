@@ -41,6 +41,13 @@ export const socials = {
 
 export type SocialKey = keyof typeof socials;
 
+/**
+ * Hand-picked X posts, shown when X_BEARER_TOKEN isn't set.
+ * TODO(client): copy the number at the end of a post URL
+ * (x.com/aijaz_ch/status/<ID>) and add it here, newest first.
+ */
+export const featuredTweetIds: string[] = [];
+
 export const heroSlides = [
   {
     id: "solidarity",

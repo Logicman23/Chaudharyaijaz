@@ -13,6 +13,10 @@ const nextConfig: NextConfig = {
   turbopack: {
     rules: {
       "*.css": {
+        // Only our own stylesheets. Running Tailwind over node_modules turns
+        // packages' CSS Modules (e.g. react-tweet) into plain CSS and drops
+        // their class names, leaving those components unstyled.
+        condition: { not: "foreign" },
         loaders: ["@tailwindcss/turbopack"],
         as: "*.css",
       },

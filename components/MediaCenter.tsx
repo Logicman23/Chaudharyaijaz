@@ -1,13 +1,13 @@
 import Image from "next/image";
 import { Suspense, type ReactNode } from "react";
+import { EmbeddedTweet } from "react-tweet";
 import { ArrowRightIcon, socialIcons } from "@/components/icons";
 import { SectionHeading } from "@/components/SectionHeading";
 import { FacebookPage } from "@/components/social/FacebookPage";
-import { PinnedTweets } from "@/components/social/PinnedTweets";
 import { XTimeline } from "@/components/social/XTimeline";
 import { YouTubePlayer } from "@/components/social/YouTubePlayer";
-import { socials, type SocialKey } from "@/lib/site";
-import { getLatestInstagramPosts, getLatestYouTubeVideos } from "@/lib/social";
+import { featuredTweetIds, socials, type SocialKey } from "@/lib/site";
+import { getLatestInstagramPosts, getLatestTweetIds, getLatestYouTubeVideos, getTweets } from "@/lib/social";
 
 /**
  * MEDIA CENTER — "Live Updates" wall.
@@ -118,6 +118,30 @@ async function YouTubeFeed() {
   );
 }
 
+/**
+ * X posts, best source first:
+ *  1. Latest posts from the X API (X_BEARER_TOKEN) — fully automatic.
+ *  2. Hand-picked `featuredTweetIds` from lib/site.ts.
+ *  3. X's timeline widget, which shows a follow card when X blocks it.
+ * Sources 1–2 render server-side with react-tweet: no X script, no login wall.
+ */
+async function XFeed() {
+  const latest = await getLatestTweetIds(4);
+  const ids = latest.length > 0 ? latest : featuredTweetIds;
+  const tweets = ids.length > 0 ? await getTweets(ids) : [];
+
+  if (tweets.length === 0) return <XTimeline height={560} />;
+  return (
+    <div data-theme="light" className="max-h-[560px] overflow-y-auto pr-1 [&_article]:!my-0 [&>div+div]:mt-4">
+      {tweets.map((t) => (
+        <div key={t.id_str}>
+          <EmbeddedTweet tweet={t} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
 async function InstagramFeed() {
   const posts = await getLatestInstagramPosts(6);
   if (posts.length === 0) {
@@ -195,7 +219,9 @@ export function MediaCenter() {
               <FacebookPage height={560} />
             </FeedCard>
             <FeedCard network="x" title="Posts on X">
-              <XTimeline height={560} />
+              <Suspense fallback={skeleton}>
+                <XFeed />
+              </Suspense>
             </FeedCard>
             <FeedCard network="instagram" title="Instagram">
               <Suspense fallback={skeleton}>
@@ -203,8 +229,6 @@ export function MediaCenter() {
               </Suspense>
             </FeedCard>
           </div>
-
-          <PinnedTweets />
         </div>
       </div>
     </section>

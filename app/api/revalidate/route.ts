@@ -6,10 +6,10 @@ import type { NextRequest } from "next/server";
  *
  * The feeds already refresh themselves every few minutes. Point a Zapier/Make
  * "new post" trigger (or YouTube's PubSubHubbub push) at
- *   POST /api/revalidate?tag=youtube   (or instagram / social)
+ *   POST /api/revalidate?tag=youtube   (or instagram / x / social)
  * with header `x-revalidate-secret: $REVALIDATE_SECRET` to update immediately.
  */
-const ALLOWED_TAGS = new Set(["social", "youtube", "instagram"]);
+const ALLOWED_TAGS = new Set(["social", "youtube", "instagram", "x"]);
 
 export async function POST(request: NextRequest) {
   const secret = process.env.REVALIDATE_SECRET;

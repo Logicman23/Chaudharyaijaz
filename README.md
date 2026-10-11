@@ -38,8 +38,9 @@ public/images/          cropped/optimised photos (originals in assets/)
 |-----------|------------------------------------------------------|-------------------------------|
 | YouTube   | Channel RSS fetched on the server, cached ~5 min      | None — works out of the box   |
 | Facebook  | Official Page Plugin, lazy-loaded on scroll           | None                          |
-| X         | Official timeline widget, lazy-loaded; follow-card fallback if X blocks it | None   |
-| X (pinned)| `react-tweet` server-rendered posts                   | Add IDs in `components/social/PinnedTweets.tsx` |
+| X         | Latest posts via X API → rendered by `react-tweet`, cached 1 h | Set `X_BEARER_TOKEN` (paid Basic tier) |
+| X (manual)| Hand-picked posts rendered by `react-tweet`            | Add IDs to `featuredTweetIds` in `lib/site.ts` |
+| X (fallback)| Timeline widget → follow card (X blocks the widget for most logged-out visitors) | None |
 | Instagram | Instagram Graph API, cached ~5 min                    | Set `INSTAGRAM_ACCESS_TOKEN` (steps in `lib/social.ts`) |
 
 ## Environment variables
@@ -48,6 +49,7 @@ public/images/          cropped/optimised photos (originals in assets/)
 |--------------------------|---------------------------------------------------------------|
 | `NEWSLETTER_WEBHOOK_URL` | Where sign-ups are POSTed (Zapier/Make → Mailchimp, Sheets…). Sign-ups are refused until set. |
 | `INSTAGRAM_ACCESS_TOKEN` | Long-lived Instagram token for the live grid.                 |
+| `X_BEARER_TOKEN`         | X API Bearer Token for automatic latest posts.                |
 | `REVALIDATE_SECRET`      | Secret header for `POST /api/revalidate?tag=youtube`.         |
 
 ## Before launch
