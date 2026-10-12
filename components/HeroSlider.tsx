@@ -74,7 +74,7 @@ export function HeroSlider() {
       <div className="absolute inset-0 -z-10 bg-gradient-to-t from-pti-green-950/90 via-transparent to-black/30" />
       <div className="absolute -bottom-40 -left-40 -z-10 size-[520px] rounded-full bg-pti-red-600/25 blur-3xl" />
 
-      <div className="mx-auto flex h-full max-w-7xl items-center px-4 pt-20 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-full max-w-7xl items-center px-4 pt-28 sm:px-6 lg:px-8">
         <AnimatePresence mode="wait">
           <motion.div
             key={slide.id}

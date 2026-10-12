@@ -2,8 +2,8 @@
 
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
-import { CloseIcon, MenuIcon, socialIcons } from "@/components/icons";
-import { navLinks, site, socials, type SocialKey } from "@/lib/site";
+import { CloseIcon, MapPinIcon, MenuIcon, PhoneIcon, socialIcons } from "@/components/icons";
+import { islamabadOffice, navLinks, site, socials, telHref, type SocialKey } from "@/lib/site";
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -57,6 +57,27 @@ export function Navbar() {
     >
       {/* Flag stripe across the very top edge */}
       <div className="flag-rule h-1 w-full" />
+
+      {/* Contact top bar — collapses once the user scrolls so the sticky header stays compact */}
+      <div
+        className={`overflow-hidden bg-pti-green-950 text-sm text-pti-green-100/85 transition-all duration-300 ${
+          scrolled || open ? "max-h-0" : "max-h-10 border-b border-white/10"
+        }`}
+      >
+        <div className="mx-auto flex h-9 max-w-7xl items-center justify-center gap-6 px-4 sm:justify-between sm:px-6 lg:px-8">
+          <p className="hidden items-center gap-2 truncate sm:flex">
+            <MapPinIcon width={15} height={15} className="shrink-0 text-pti-red-500" />
+            <span className="truncate">{islamabadOffice.address}</span>
+          </p>
+          <a
+            href={telHref(islamabadOffice.phones[0])}
+            className="inline-flex shrink-0 items-center gap-2 font-semibold text-white transition hover:text-gold-300"
+          >
+            <PhoneIcon width={15} height={15} className="text-gold-400" />
+            {islamabadOffice.phones[0]}
+          </a>
+        </div>
+      </div>
 
       <nav aria-label="Primary" className="mx-auto flex h-18 max-w-7xl items-center justify-between gap-6 px-4 sm:px-6 lg:px-8">
         <a href="#home" className="group flex items-center gap-3" onClick={() => setOpen(false)}>
