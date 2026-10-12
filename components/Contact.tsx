@@ -1,7 +1,7 @@
 import { MailIcon, MapPinIcon, PhoneIcon, WhatsAppIcon } from "@/components/icons";
 import { Reveal } from "@/components/Reveal";
 import { SectionHeading } from "@/components/SectionHeading";
-import { contact, offices } from "@/lib/site";
+import { contact, islamabadOffice, offices, telHref } from "@/lib/site";
 
 export function Contact() {
   return (
@@ -14,28 +14,44 @@ export function Contact() {
         />
 
         <div className="grid gap-6 lg:grid-cols-3">
-          {offices.map((o, i) => (
-            <Reveal key={o.city} delay={i * 0.08}>
-              <article className="h-full rounded-2xl border-t-4 border-pti-green-600 bg-white p-7 shadow-sm">
-                <p className="font-heading text-xs font-bold uppercase tracking-[0.2em] text-pti-red-600">{o.label}</p>
-                <h3 className="mt-2 font-heading text-2xl font-extrabold text-pti-green-900">{o.city}</h3>
-                <p className="mt-4 flex gap-3 text-slate-600">
-                  <MapPinIcon className="mt-0.5 shrink-0 text-pti-green-600" />
-                  {o.address}
-                </p>
-                <ul className="mt-4 space-y-2">
-                  {o.phones.map((p) => (
-                    <li key={p}>
-                      <a href={`tel:${p.replace(/-/g, "")}`} className="inline-flex items-center gap-3 font-medium text-pti-green-800 hover:text-pti-red-600">
-                        <PhoneIcon width={18} height={18} className="text-pti-green-600" />
-                        {p}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </article>
-            </Reveal>
-          ))}
+          {offices.map((o, i) => {
+            const featured = o === islamabadOffice;
+            return (
+              <Reveal key={o.city} delay={i * 0.08}>
+                <article
+                  className={`h-full rounded-2xl border-t-4 bg-white p-7 ${
+                    featured ? "border-gold-500 shadow-lg ring-1 ring-gold-200" : "border-pti-green-600 shadow-sm"
+                  }`}
+                >
+                  <p className="font-heading text-xs font-bold uppercase tracking-[0.2em] text-pti-red-600">{o.label}</p>
+                  <h3 className="mt-2 font-heading text-2xl font-extrabold text-pti-green-900">{o.city}</h3>
+                  <address className="mt-4 flex gap-3 not-italic text-slate-600">
+                    <MapPinIcon className="mt-0.5 shrink-0 text-pti-red-600" />
+                    {o.address}
+                  </address>
+                  <ul className="mt-4 space-y-2">
+                    {o.phones.map((p) => (
+                      <li key={p}>
+                        <a href={telHref(p)} className="inline-flex items-center gap-3 font-medium text-pti-green-800 hover:text-pti-red-600">
+                          <PhoneIcon width={18} height={18} className="text-gold-600" />
+                          {p}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                  {featured && (
+                    <a
+                      href={telHref(o.phones[0])}
+                      className="mt-6 inline-flex items-center gap-2 rounded-full bg-pti-red-600 px-5 py-2.5 font-heading text-sm font-bold text-white transition hover:bg-pti-red-700"
+                    >
+                      <PhoneIcon width={16} height={16} className="text-gold-300" />
+                      Call the Islamabad office
+                    </a>
+                  )}
+                </article>
+              </Reveal>
+            );
+          })}
 
           <Reveal delay={0.16}>
             <article className="flex h-full flex-col rounded-2xl bg-pti-green-900 p-7 text-white shadow-xl">

@@ -1,11 +1,11 @@
-import { socialIcons } from "@/components/icons";
-import { navLinks, site, socials, type SocialKey } from "@/lib/site";
+import { MapPinIcon, PhoneIcon, socialIcons } from "@/components/icons";
+import { islamabadOffice, navLinks, site, socials, telHref, type SocialKey } from "@/lib/site";
 
 export function Footer() {
   return (
     <footer className="bg-pti-green-950 text-pti-green-100/80">
       <div className="flag-rule h-1.5" />
-      <div className="mx-auto grid max-w-7xl gap-12 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
+      <div className="mx-auto grid max-w-7xl gap-12 px-4 py-16 sm:px-6 md:grid-cols-2 lg:grid-cols-4 lg:px-8">
         <div>
           <div className="flex items-center gap-3">
             <span className="grid size-12 place-items-center rounded-full border-2 border-gold-400 bg-pti-green-800 font-heading font-black text-gold-300">
@@ -41,6 +41,24 @@ export function Footer() {
             </li>
           </ul>
         </nav>
+
+        <div>
+          <p className="mb-4 font-heading text-sm font-bold uppercase tracking-widest text-gold-400">
+            {islamabadOffice.label}
+          </p>
+          <address className="space-y-3 not-italic">
+            <p className="flex gap-3 leading-relaxed">
+              <MapPinIcon width={20} height={20} className="mt-0.5 shrink-0 text-gold-400" />
+              {islamabadOffice.address}
+            </p>
+            {islamabadOffice.phones.map((p) => (
+              <a key={p} href={telHref(p)} className="flex items-center gap-3 font-medium text-white transition hover:text-gold-300">
+                <PhoneIcon width={20} height={20} className="shrink-0 text-pti-red-500" />
+                {p}
+              </a>
+            ))}
+          </address>
+        </div>
 
         <div>
           <p className="mb-4 font-heading text-sm font-bold uppercase tracking-widest text-gold-400">Follow</p>

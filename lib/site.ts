@@ -290,7 +290,7 @@ export const events: {
   {
     title: "Press Conference",
     type: "Press Conference",
-    venue: "Plot 12, Mandi Commercial Plaza, I-8 Markaz",
+    venue: "Street 51 Marvi Road, House 16, F-7/4",
     city: "Islamabad",
     date: null,
     description: "Statement on current national affairs and the party's way forward.",
@@ -307,10 +307,17 @@ export const offices = [
   {
     city: "Islamabad",
     label: "Islamabad Office",
-    address: "Plot 12, Mandi Commercial Plaza, I-8 Markaz, Islamabad",
-    phones: ["051-4436559", "051-4437269", "051-9258872"],
+    address: "Street 51 Marvi Road, House 16, F-7/4, Islamabad, Pakistan",
+    phones: ["+92 321 5172162"],
   },
 ] as const;
+
+export const islamabadOffice = offices[1];
+
+/** Turns a display number like "+92 321 5172162" or "0456-504491" into a `tel:` href. */
+export function telHref(phone: string) {
+  return `tel:${phone.replace(/[^\d+]/g, "")}`;
+}
 
 // TODO(client): confirm these are still current before launch.
 export const contact = {
