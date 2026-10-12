@@ -50,6 +50,17 @@ export const featuredTweetIds: string[] = [];
 
 export const heroSlides = [
   {
+    // Finished banner artwork (text baked in) — shown whole, without the overlay copy.
+    id: "banner",
+    banner: true,
+    eyebrow: "With Imran Khan",
+    image: "/images/aijaz-imran-banner.jpg",
+    width: 1312,
+    height: 463,
+    alt: "Mohammed Aijaz Chaudhary, former Member of the National Assembly of Pakistan, in conversation with Imran Khan — a lifelong commitment to public service, democratic values and people's welfare",
+    href: "#biography",
+  },
+  {
     id: "solidarity",
     eyebrow: "Solidarity & Leadership",
     title: "Standing with Imran Khan.",

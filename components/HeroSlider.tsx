@@ -51,21 +51,26 @@ export function HeroSlider() {
           exit={{ opacity: 0 }}
           transition={{ duration: 1.1, ease: "easeInOut" }}
         >
-          <motion.div
-            className="absolute inset-0"
-            initial={{ scale: reduce ? 1 : 1.12 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: AUTOPLAY_MS / 1000 + 1.5, ease: "linear" }}
-          >
-            <Image
-              src={slide.image}
-              alt={slide.alt}
-              fill
-              priority={index === 0}
-              sizes="100vw"
-              className={`object-cover ${slide.position}`}
-            />
-          </motion.div>
+          {"banner" in slide ? (
+            // Blurred copy of the banner as an ambient backdrop; the sharp banner sits in the foreground.
+            <Image src={slide.image} alt="" fill sizes="100vw" className="scale-110 object-cover opacity-40 blur-2xl" />
+          ) : (
+            <motion.div
+              className="absolute inset-0"
+              initial={{ scale: reduce ? 1 : 1.12 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: AUTOPLAY_MS / 1000 + 1.5, ease: "linear" }}
+            >
+              <Image
+                src={slide.image}
+                alt={slide.alt}
+                fill
+                priority={index === 0}
+                sizes="100vw"
+                className={`object-cover ${slide.position}`}
+              />
+            </motion.div>
+          )}
         </motion.div>
       </AnimatePresence>
 
@@ -76,58 +81,79 @@ export function HeroSlider() {
 
       <div className="mx-auto flex h-full max-w-7xl items-center px-4 pt-28 sm:px-6 lg:px-8">
         <AnimatePresence mode="wait">
-          <motion.div
-            key={slide.id}
-            className="max-w-2xl"
-            initial="hidden"
-            animate="show"
-            exit="exit"
-            variants={{
-              hidden: {},
-              show: { transition: { staggerChildren: 0.12, delayChildren: 0.25 } },
-              exit: { opacity: 0, transition: { duration: 0.25 } },
-            }}
-            aria-live={paused ? "polite" : "off"}
-          >
-            {[
-              <p key="eyebrow" className="mb-5 inline-flex items-center gap-2 rounded-full border border-gold-400/50 bg-black/30 px-4 py-1.5 font-heading text-xs font-bold uppercase tracking-[0.2em] text-gold-300 backdrop-blur">
-                <span className="size-2 animate-pulse rounded-full bg-pti-red-500" />
-                {slide.eyebrow}
-              </p>,
-              <h1 key="title" className="font-heading text-4xl font-black leading-[1.05] text-white text-balance sm:text-5xl lg:text-7xl">
-                {slide.title}{" "}
-                <span className="text-gold-gradient">{slide.highlight}</span>
-              </h1>,
-              <p key="body" className="mt-6 max-w-xl text-lg leading-relaxed text-white/85 sm:text-xl">
-                {slide.body}
-              </p>,
-              <div key="ctas" className="mt-9 flex flex-wrap gap-4">
-                <a
-                  href={slide.cta.href}
-                  className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-gold-500 to-gold-400 px-7 py-3.5 font-heading font-bold text-pti-green-950 shadow-xl shadow-gold-600/25 transition hover:-translate-y-0.5 hover:from-pti-red-600 hover:to-pti-red-500 hover:text-white"
+          {"banner" in slide ? (
+            <motion.a
+              key={slide.id}
+              href={slide.href}
+              className="block w-full overflow-hidden rounded-2xl shadow-2xl shadow-black/40 ring-1 ring-gold-400/40"
+              initial={{ opacity: 0, y: reduce ? 0 : 24 }}
+              animate={{ opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } }}
+              exit={{ opacity: 0, transition: { duration: 0.25 } }}
+            >
+              <Image
+                src={slide.image}
+                alt={slide.alt}
+                width={slide.width}
+                height={slide.height}
+                priority={index === 0}
+                sizes="(min-width: 1280px) 1216px, 100vw"
+                className="h-auto w-full"
+              />
+            </motion.a>
+          ) : (
+            <motion.div
+              key={slide.id}
+              className="max-w-2xl"
+              initial="hidden"
+              animate="show"
+              exit="exit"
+              variants={{
+                hidden: {},
+                show: { transition: { staggerChildren: 0.12, delayChildren: 0.25 } },
+                exit: { opacity: 0, transition: { duration: 0.25 } },
+              }}
+              aria-live={paused ? "polite" : "off"}
+            >
+              {[
+                <p key="eyebrow" className="mb-5 inline-flex items-center gap-2 rounded-full border border-gold-400/50 bg-black/30 px-4 py-1.5 font-heading text-xs font-bold uppercase tracking-[0.2em] text-gold-300 backdrop-blur">
+                  <span className="size-2 animate-pulse rounded-full bg-pti-red-500" />
+                  {slide.eyebrow}
+                </p>,
+                <h1 key="title" className="font-heading text-4xl font-black leading-[1.05] text-white text-balance sm:text-5xl lg:text-7xl">
+                  {slide.title}{" "}
+                  <span className="text-gold-gradient">{slide.highlight}</span>
+                </h1>,
+                <p key="body" className="mt-6 max-w-xl text-lg leading-relaxed text-white/85 sm:text-xl">
+                  {slide.body}
+                </p>,
+                <div key="ctas" className="mt-9 flex flex-wrap gap-4">
+                  <a
+                    href={slide.cta.href}
+                    className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-gold-500 to-gold-400 px-7 py-3.5 font-heading font-bold text-pti-green-950 shadow-xl shadow-gold-600/25 transition hover:-translate-y-0.5 hover:from-pti-red-600 hover:to-pti-red-500 hover:text-white"
+                  >
+                    {slide.cta.label}
+                    <ArrowRightIcon className="transition group-hover:translate-x-1" />
+                  </a>
+                  <a
+                    href="#biography"
+                    className="inline-flex items-center gap-2 rounded-full border-2 border-white/40 px-7 py-3.5 font-heading font-bold text-white transition hover:border-gold-400 hover:text-gold-300"
+                  >
+                    Read My Story
+                  </a>
+                </div>,
+              ].map((child) => (
+                <motion.div
+                  key={child.key}
+                  variants={{
+                    hidden: { opacity: 0, y: reduce ? 0 : 24 },
+                    show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
+                  }}
                 >
-                  {slide.cta.label}
-                  <ArrowRightIcon className="transition group-hover:translate-x-1" />
-                </a>
-                <a
-                  href="#biography"
-                  className="inline-flex items-center gap-2 rounded-full border-2 border-white/40 px-7 py-3.5 font-heading font-bold text-white transition hover:border-gold-400 hover:text-gold-300"
-                >
-                  Read My Story
-                </a>
-              </div>,
-            ].map((child) => (
-              <motion.div
-                key={child.key}
-                variants={{
-                  hidden: { opacity: 0, y: reduce ? 0 : 24 },
-                  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
-                }}
-              >
-                {child}
-              </motion.div>
-            ))}
-          </motion.div>
+                  {child}
+                </motion.div>
+              ))}
+            </motion.div>
+          )}
         </AnimatePresence>
       </div>
 
