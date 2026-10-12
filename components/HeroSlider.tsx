@@ -52,8 +52,14 @@ export function HeroSlider() {
           transition={{ duration: 1.1, ease: "easeInOut" }}
         >
           {"banner" in slide ? (
-            // Banner artwork covers the whole frame; no zoom, since the source is already low-res.
-            <Image src={slide.image} alt={slide.alt} fill priority={index === 0} sizes="100vw" className="object-cover object-center" />
+            // The banner is too wide to cover a full-screen frame without cropping its text, so show it whole
+            // (fitted below the header) over a blurred copy of itself that fills the remaining space.
+            <>
+              <Image src={slide.image} alt="" fill sizes="100vw" className="scale-110 object-cover opacity-50 blur-2xl" />
+              <div className="absolute inset-x-0 bottom-0 top-28">
+                <Image src={slide.image} alt={slide.alt} fill priority={index === 0} sizes="100vw" className="object-contain" />
+              </div>
+            </>
           ) : (
             <motion.div
               className="absolute inset-0"

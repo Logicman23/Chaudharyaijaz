@@ -50,7 +50,7 @@ export const featuredTweetIds: string[] = [];
 
 export const heroSlides = [
   {
-    // Finished banner artwork (text baked in) — fills the frame, without the overlay copy.
+    // Finished banner artwork (text baked in) — shown whole, without the overlay copy.
     id: "banner",
     banner: true,
     eyebrow: "With Imran Khan",
