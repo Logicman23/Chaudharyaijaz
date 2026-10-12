@@ -52,8 +52,8 @@ export function HeroSlider() {
           transition={{ duration: 1.1, ease: "easeInOut" }}
         >
           {"banner" in slide ? (
-            // Blurred copy of the banner as an ambient backdrop; the sharp banner sits in the foreground.
-            <Image src={slide.image} alt="" fill sizes="100vw" className="scale-110 object-cover opacity-40 blur-2xl" />
+            // Banner artwork covers the whole frame; no zoom, since the source is already low-res.
+            <Image src={slide.image} alt={slide.alt} fill priority={index === 0} sizes="100vw" className="object-cover object-center" />
           ) : (
             <motion.div
               className="absolute inset-0"
@@ -74,32 +74,23 @@ export function HeroSlider() {
         </motion.div>
       </AnimatePresence>
 
-      {/* Green overlay keeps type legible on any photo; red glow adds warmth bottom-left */}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-pti-green-950/95 via-pti-green-950/65 to-transparent" />
-      <div className="absolute inset-0 -z-10 bg-gradient-to-t from-pti-green-950/90 via-transparent to-black/30" />
-      <div className="absolute -bottom-40 -left-40 -z-10 size-[520px] rounded-full bg-pti-red-600/25 blur-3xl" />
+      {"banner" in slide ? (
+        // The banner has its own text — only shade the top and bottom so the navbar and controls stay legible.
+        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-black/40 via-transparent via-25% to-black/50" />
+      ) : (
+        <>
+          {/* Green overlay keeps type legible on any photo; red glow adds warmth bottom-left */}
+          <div className="absolute inset-0 -z-10 bg-gradient-to-r from-pti-green-950/95 via-pti-green-950/65 to-transparent" />
+          <div className="absolute inset-0 -z-10 bg-gradient-to-t from-pti-green-950/90 via-transparent to-black/30" />
+          <div className="absolute -bottom-40 -left-40 -z-10 size-[520px] rounded-full bg-pti-red-600/25 blur-3xl" />
+        </>
+      )}
 
       <div className="mx-auto flex h-full max-w-7xl items-center px-4 pt-28 sm:px-6 lg:px-8">
         <AnimatePresence mode="wait">
           {"banner" in slide ? (
-            <motion.a
-              key={slide.id}
-              href={slide.href}
-              className="block w-full overflow-hidden rounded-2xl shadow-2xl shadow-black/40 ring-1 ring-gold-400/40"
-              initial={{ opacity: 0, y: reduce ? 0 : 24 }}
-              animate={{ opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } }}
-              exit={{ opacity: 0, transition: { duration: 0.25 } }}
-            >
-              <Image
-                src={slide.image}
-                alt={slide.alt}
-                width={slide.width}
-                height={slide.height}
-                priority={index === 0}
-                sizes="(min-width: 1280px) 1216px, 100vw"
-                className="h-auto w-full"
-              />
-            </motion.a>
+            // Whole frame links through; the slider controls sit above it (z-10).
+            <a key={slide.id} href={slide.href} aria-label="Read my story" className="absolute inset-0" />
           ) : (
             <motion.div
               key={slide.id}
